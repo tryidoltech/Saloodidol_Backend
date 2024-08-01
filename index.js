@@ -19,10 +19,13 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.get("/", (req, res) => {
+app.get("/hello", (req, res) => {
   res.send(`<h1>Welcome To The Salon idol</h1>`);
 });
 
 app.listen(port, () => {
   console.log(`Server running on port: ${port}`);
 });
+
+// Export the app for Vercel to use
+module.exports = app;
