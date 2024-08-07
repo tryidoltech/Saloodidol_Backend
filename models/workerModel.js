@@ -1,25 +1,21 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const objectId = mongoose.Types.ObjectId;
 
-const userSchema = new mongoose.Schema(
+const workerSchema = new mongoose.Schema(
   {
     name: {
       type: String,
+      required: true,
       trim: true,
     },
-    username: {
+    image: {
       type: String,
       required: true,
     },
-    email: {
+    designation: {
       type: String,
       required: true,
-      validate: {
-        validator: function (v) {
-          return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(v);
-        },
-        message: "Email must be a valid email format.",
-      },
+      trim: true,
     },
     mobile: {
       type: Number,
@@ -32,15 +28,9 @@ const userSchema = new mongoose.Schema(
         message: "Mobile number must be between 6000000000 and 6999999999.",
       },
     },
-
-    image: {
+    worker_Id: {
       type: String,
-      validate: {
-        validator: function (v) {
-          return /\.(png|jpg|jpeg)$/.test(v);
-        },
-        message: "Image must be a valid file type: png, jpg, or jpeg.",
-      },
+      required: true,
     },
     password: {
       type: String,
@@ -53,20 +43,11 @@ const userSchema = new mongoose.Schema(
           "Password must contain at least one uppercase letter, one lowercase letter, one number, one special symbol, and be at least 8 characters long.",
       },
     },
-    otp: {
-      type: Number,
+    branchId: {
+      type: objectId,
+      ref: "Branch",
     },
-    isAdmin: {
-      type: Boolean,
-      default: false,
-    },
-    branchId: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Branch",
-      },
-    ],
-    disable: {
+    isDisabled: {
       type: Boolean,
       default: false,
     },
@@ -74,7 +55,7 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-userSchema.pre("save", async function (next) {
+workerSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
     try {
       const saltRounds = 10;
@@ -86,8 +67,8 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-userSchema.methods.verifyPassword = async function (password) {
+workerSchema.methods.verifyPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("Worker", workerSchema);
