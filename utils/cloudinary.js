@@ -26,19 +26,4 @@ exports.uploadOnCloudinary = async (localFilePath) => {
   }
 };
 
-//==========  delete file from cloudinary  ===========//
 
-exports.deleteFromCloudinary = async (image) => {
-  try {
-    const imageUrl = image;
-    const imageName = imageUrl.split("/").pop().split(".")[0];
-
-    const deleteImage = await cloudinary.uploader.destroy(
-      `${process.env.CLOUDINARY_FOLDER_NAME}/${imageName}`
-    );
-    return deleteImage ? true : false;
-  } catch (error) {
-    fs.unlink(image);
-    return null;
-  }
-};
