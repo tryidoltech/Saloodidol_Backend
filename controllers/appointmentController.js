@@ -1,6 +1,10 @@
 const Appointment = require("../models/appointmentModel");
 const asyncHandler = require("../middlewares/asyncHandler");
 
+function generateRandomNumber() {
+  return Math.floor(1000 + Math.random() * 9000);
+}
+
 //============  Create appointment  =============//
 
 const createAppointment = asyncHandler(async (req, res) => {
@@ -170,30 +174,6 @@ const getAllConformAppointmentsByBranchId = asyncHandler(async (req, res) => {
   }
 });
 
-//============  Get all Arriving appointments by branch  ============//
-
-const getAllArrivingAppointmentsByBranchId = asyncHandler(async (req, res) => {
-  try {
-    const appointments = await Appointment.find({
-      branchId: req.params.branchId,
-      status: "ARRIVING",
-    });
-
-    if (!appointments.length) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Arriving appointment not found" });
-    }
-    return res.status(200).json({
-      success: true,
-      message: "Arriving appointment fetched successfully",
-      appointments: appointments,
-    });
-  } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
-  }
-});
-
 //============  Get all check in appointments by branch  ============//
 
 const getAllCheckInAppointmentsByBranchId = asyncHandler(async (req, res) => {
@@ -217,57 +197,6 @@ const getAllCheckInAppointmentsByBranchId = asyncHandler(async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 });
-
-//============  Get all work start appointments by branch  ============//
-
-const getAllWorkStartAppointmentsByBranchId = asyncHandler(async (req, res) => {
-  try {
-    const appointments = await Appointment.find({
-      branchId: req.params.branchId,
-      status: "WORK START",
-    });
-
-    if (!appointments.length) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Work start appointment not found" });
-    }
-    return res.status(200).json({
-      success: true,
-      message: "Work start appointment fetched successfully",
-      appointments: appointments,
-    });
-  } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
-  }
-});
-
-//============  Get all work complete appointments by branch  ============//
-
-const getAllWorkCompleteAppointmentsByBranchId = asyncHandler(
-  async (req, res) => {
-    try {
-      const appointments = await Appointment.find({
-        branchId: req.params.branchId,
-        status: "WORK COMPLETED",
-      });
-
-      if (!appointments.length) {
-        return res.status(404).json({
-          success: false,
-          message: "Work complete appointment not found",
-        });
-      }
-      return res.status(200).json({
-        success: true,
-        message: "Work complete appointment fetched successfully",
-        appointments: appointments,
-      });
-    } catch (error) {
-      return res.status(500).json({ success: false, message: error.message });
-    }
-  }
-);
 
 //============  Get all rejected appointments by branch  ============//
 
