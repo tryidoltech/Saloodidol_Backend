@@ -52,10 +52,7 @@ const appointmentSchema = new mongoose.Schema(
       enum: [
         "PENDING",
         "CONFORM",
-        "ARRIVING",
         "CHECK IN",
-        "WORK START",
-        "WORK COMPLETED",
         "REJECTED",
         "NOT COMING",
         "RESCHEDULE",
